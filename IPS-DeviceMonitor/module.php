@@ -1,7 +1,7 @@
 <?php
 
 declare(strict_types=1);
-require_once __DIR__.'/../libs/helper.php';
+require_once __DIR__ . '/../libs/helper.php';
 
 class IPS_DeviceMonitor extends IPSModule
 {
@@ -47,9 +47,9 @@ class IPS_DeviceMonitor extends IPSModule
     private function RegisterVariablenProfiles()
     {
         //Profile for Online / Offline Status
-        $this->RegisterProfileBooleanEx('DM.Status', 'Network', '', '', [
-            [false, 'Offline',  '', 0xFF0000],
-            [true, 'Online',  '', 0x00FF00],
-        ]);
+        $this->RegisterProfileBooleanEx('DM.Status', 'Network', '', '', array(
+            array(false, 'Offline',  '', 0xFF0000),
+            array(true, 'Online',  '', 0x00FF00),
+        ));
     }
 }
