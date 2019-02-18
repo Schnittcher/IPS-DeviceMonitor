@@ -9,7 +9,7 @@ trait helper
         } else {
             $profile = IPS_GetVariableProfile($Name);
             if ($profile['ProfileType'] != 0) {
-                throw new Exception('Variable profile type does not match for profile '.$Name);
+                throw new Exception('Variable profile type does not match for profile ' . $Name);
             }
         }
 
