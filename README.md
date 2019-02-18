@@ -1,7 +1,7 @@
 [![Version](https://img.shields.io/badge/Symcon-PHPModul-red.svg)](https://www.symcon.de/service/dokumentation/entwicklerbereich/sdk-tools/sdk-php/)
 ![Version](https://img.shields.io/badge/Symcon%20Version-4.1%20%3E-blue.svg)
 [![License](https://img.shields.io/badge/License-CC%20BY--NC--SA%204.0-green.svg)](https://creativecommons.org/licenses/by-nc-sa/4.0/)
-[![StyleCI](https://styleci.io/repos/152767193/shield?style=flat)](https://styleci.io/repos/152767193)
+[![StyleCI](https://styleci.io/repos/171239196/shield?style=flat)](https://styleci.io/repos/171239196)
 
 # IPS-DeviceMonitor
    Mit diesem Modul ist es möglich Geräte im Netzwerk zu überwachen.
