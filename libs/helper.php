@@ -49,6 +49,7 @@ trait helper
         IPS_SetVariableProfileText($Name, $Prefix, $Suffix);
         IPS_SetVariableProfileValues($Name, $MinValue, $MaxValue, $StepSize);
     }
+
     protected function RegisterProfileIntegerEx($Name, $Icon, $Prefix, $Suffix, $Associations)
     {
         if (count($Associations) === 0) {
@@ -66,30 +67,29 @@ trait helper
 
     protected function WakeOnLan()
     {
-
         $addr = $this->ReadPropertyString('BroadcastAddress');
         $addr_byte = explode(':', $this->ReadPropertyString('MACAddress'));
         $hw_addr = '';
-        for ($a=0; $a < 6; $a++) $hw_addr .= chr(hexdec($addr_byte[$a]));
-        $msg = chr(255).chr(255).chr(255).chr(255).chr(255).chr(255);
-        for ($a = 1; $a <= 16; $a++) $msg .= $hw_addr;
+        for ($a = 0; $a < 6; $a++) {
+            $hw_addr .= chr(hexdec($addr_byte[$a]));
+        }
+        $msg = chr(255) . chr(255) . chr(255) . chr(255) . chr(255) . chr(255);
+        for ($a = 1; $a <= 16; $a++) {
+            $msg .= $hw_addr;
+        }
         // send it to the broadcast address using UDP
         $s = socket_create(AF_INET, SOCK_DGRAM, SOL_UDP);
-        if ($s == false)
-        {
-            $this->SendDebug('Error creating socket!','Error code is '.socket_last_error($s).' - ' . socket_strerror(socket_last_error($s)),0);
-        }
-        else
-        {
+        if ($s == false) {
+            $this->SendDebug('Error creating socket!', 'Error code is ' . socket_last_error($s) . ' - ' . socket_strerror(socket_last_error($s)), 0);
+        } else {
             // setting a broadcast option to socket:
-            $opt_ret = socket_set_option($s, 1, 6, TRUE);
-            if($opt_ret < 0)
-            {
-                $this->SendDebug('setsockopt() failed, error:' , strerror($opt_ret),0);
+            $opt_ret = socket_set_option($s, 1, 6, true);
+            if ($opt_ret < 0) {
+                $this->SendDebug('setsockopt() failed, error:', strerror($opt_ret), 0);
             }
             $result = socket_sendto($s, $msg, strlen($msg), 0, $addr, 2050);
             socket_close($s);
-            $this->SendDebug('Result' , 'Magic Packet sent ('.$result.') to '.$addr.', MAC='.$this->ReadPropertyString('MACAddress'),0);
+            $this->SendDebug('Result', 'Magic Packet sent (' . $result . ') to ' . $addr . ', MAC=' . $this->ReadPropertyString('MACAddress'), 0);
         }
     }
 }
