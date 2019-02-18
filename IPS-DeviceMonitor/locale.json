@@ -2,6 +2,8 @@
   "translations": {
     "de": {
       "IP Address": "IP-Adresse",
+      "Broadcast Address": "Broadcast-Adresse",
+      "MAC Address": "MAC-Adresse",
       "Update Interval": "Update Intervall",
       "milliseconds": "Millisekunden",
       "seconds": "Sekunden",
