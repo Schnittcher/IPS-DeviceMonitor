@@ -1,0 +1,11 @@
+{
+  "translations": {
+    "de": {
+      "IP Address": "IP-Adresse",
+      "Update Interval": "Update Intervall",
+      "milliseconds": "Millisekunden",
+      "seconds": "Sekunden",
+      "Variable profile type does not match for profile": "Der Profiltyp der Variablen stimmt nicht mit dem Profil überein"
+    }
+  }
+}

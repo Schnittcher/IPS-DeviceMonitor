@@ -1,0 +1,11 @@
+{
+	"id": "{7AF78FBA-B705-CC81-E446-86C9135C1C28}",
+	"name": "IPS_DeviceMonitor",
+	"type": 3,
+	"vendor": "",
+	"aliases": ["Device Monitor"],
+	"parentRequirements": [],
+	"childRequirements": [],
+	"implemented": [],
+	"prefix": "DM"
+}

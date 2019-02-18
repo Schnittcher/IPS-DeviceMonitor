@@ -1,0 +1,10 @@
+{
+    "elements":
+    [
+      { "type": "ValidationTextBox", "name": "IPAddress", "caption": "IP Address" },
+      { "type": "Label", "label": "Ping Timeout" },
+      { "type": "IntervalBox", "name": "PingTimeout", "caption": "milliseconds" },
+      { "type": "Label", "label": "Update Interval" },
+      { "type": "IntervalBox", "name": "Interval", "caption": "seconds" }
+    ]
+}
