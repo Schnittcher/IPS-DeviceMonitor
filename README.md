@@ -28,9 +28,9 @@ https://github.com/Schnittcher/IPS-DeviceMonitor.git
 ###IPS-DeviceMonitor
 Feld | Beschreibung
 ------------ | -------------
-IP-Adresse | IP-Adresse des Gerätes, welches überwacht werden soll
-Ping Timeout| Wartezeit in Millisekunden
-Updeate Intervall|Zeit in Sekunden, wie oft das Gerät überprüft werden soll
+IP-Adresse  | IP-Adresse des Gerätes, welches überwacht werden soll
+Ping Timeout | Wartezeit in Millisekunden
+Updeate Intervall |Zeit in Sekunden, wie oft das Gerät überprüft werden soll
 
 ## 5. Spenden
 
