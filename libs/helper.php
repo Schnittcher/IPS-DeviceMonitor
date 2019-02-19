@@ -96,10 +96,10 @@ trait helper
     protected function UnregisterTimer($Name)
     {
         $id = @IPS_GetObjectIDByIdent($Name, $this->InstanceID);
-        if ($id > 0)
-        {
-            if (!IPS_EventExists($id))
+        if ($id > 0) {
+            if (!IPS_EventExists($id)) {
                 throw new Exception('Timer not present', E_USER_NOTICE);
+            }
             IPS_DeleteEvent($id);
         }
     }
