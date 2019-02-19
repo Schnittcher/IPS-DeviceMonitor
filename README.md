@@ -26,6 +26,7 @@ https://github.com/Schnittcher/IPS-DeviceMonitor.git
 ## 3. Konfiguration in IP-Symcon
 
 ###IPS-DeviceMonitor
+
 Feld | Beschreibung
 ------------ | -------------
 IP-Adresse  | IP-Adresse des Gerätes, welches überwacht werden soll
