@@ -25,7 +25,7 @@ https://github.com/Schnittcher/IPS-DeviceMonitor.git
 
 ## 3. Konfiguration in IP-Symcon
 
-###IPS-DeviceMonitor
+### IPS-DeviceMonitor
 
 Feld | Beschreibung
 ------------ | -------------
