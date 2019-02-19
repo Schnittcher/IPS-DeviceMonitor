@@ -4,7 +4,7 @@
 [![StyleCI](https://styleci.io/repos/171239196/shield?style=flat)](https://styleci.io/repos/171239196)
 
 # IPS-DeviceMonitor
-   Mit diesem Modul ist es möglich Geräte im Netzwerk zu überwachen.
+   Mit diesem Modul ist es möglich den Online / Offline Status von Geräten im LAN zu überwachen.
  
    ## Inhaltverzeichnis
    1. [Voraussetzungen](#1-voraussetzungen)

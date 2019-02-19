@@ -28,7 +28,7 @@ class IPS_DeviceMonitor extends IPSModule
 
     public function Destroy()
     {
-        //$this->UnregisterTimer('DM_UpdateStatus');
+        $this->UnregisterTimer('DM_UpdateStatus');
     }
 
     public function ApplyChanges()
