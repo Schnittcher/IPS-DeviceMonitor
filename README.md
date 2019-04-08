@@ -33,6 +33,9 @@ IP-Adresse  | IP-Adresse des Gerätes, welches überwacht werden soll
 Ping Timeout | Wartezeit in Millisekunden
 Updeate Intervall |Zeit in Sekunden, wie oft das Gerät überprüft werden soll
 
+## 4. Benutzung
+Geräte können über die Variable Wake On Lan oder über die Funktion DM_WakeOnLan($InstanceID) geweckt werden.
+
 ## 5. Spenden
 
 Dieses Modul ist für die nicht kommzerielle Nutzung kostenlos, Schenkungen als Unterstützung für den Autor werden hier akzeptiert:    
