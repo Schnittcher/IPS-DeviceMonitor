@@ -67,7 +67,7 @@ trait helper
 
     public function WakeOnLan()
     {
-        if ($this->ReadPropertyString('BroadcastAddress') != "" and $this->ReadPropertyString('MACAddress') != "") {
+        if ($this->ReadPropertyString('BroadcastAddress') != '' and $this->ReadPropertyString('MACAddress') != '') {
             $addr = $this->ReadPropertyString('BroadcastAddress');
             $addr_byte = explode(':', $this->ReadPropertyString('MACAddress'));
             $hw_addr = '';
@@ -93,7 +93,7 @@ trait helper
                 $this->SendDebug('Result', 'Magic Packet sent (' . $result . ') to ' . $addr . ', MAC=' . $this->ReadPropertyString('MACAddress'), 0);
             }
         } else {
-            $this->SendDebug(__FUNCTION__, 'Broadcast or Mac Address is missing',0);
+            $this->SendDebug(__FUNCTION__, 'Broadcast or Mac Address is missing', 0);
         }
     }
 
