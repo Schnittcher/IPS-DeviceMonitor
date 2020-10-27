@@ -8,7 +8,8 @@
       "milliseconds": "Millisekunden",
       "seconds": "Sekunden",
       "Variable profile type does not match for profile": "Der Profiltyp der Variablen stimmt nicht mit dem Profil überein",
-      "Broadcast or Mac Address is missing": "Broadcast- oder Mac-Adresse fehlt"
+      "Broadcast or Mac Address is missing": "Broadcast- oder Mac-Adresse fehlt",
+      "Wake on Lan": "Wake on Lan"
     }
   }
 }

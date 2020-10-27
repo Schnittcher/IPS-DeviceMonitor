@@ -17,13 +17,11 @@ class IPS_DeviceMonitor extends IPSModule
         $this->RegisterPropertyString('MACAddress', '');
         $this->RegisterPropertyInteger('PingTimeout', 1000);
         $this->RegisterPropertyInteger('Interval', 20);
+        $this->RegisterPropertyBoolean('WakeOnLan', false);
 
         $this->RegisterTimer('DM_UpdateTimer', 0, 'DM_UpdateStatus($_IPS[\'TARGET\']);');
         $this->RegisterVariablenProfiles();
         $this->RegisterVariableBoolean('DeviceStatus', 'Status', 'DM.Status');
-        $this->RegisterVariableInteger('DeviceWOL', 'Wake On Lan', 'DM.WOL');
-        SetValue($this->GetIDForIdent('DeviceWOL'), 1);
-        $this->EnableAction('DeviceWOL');
     }
 
     public function Destroy()
@@ -36,35 +34,23 @@ class IPS_DeviceMonitor extends IPSModule
         //Never delete this line!
         parent::ApplyChanges();
 
+        $WOL = $this->ReadPropertyBoolean('WakeOnLan');
+        $this->MaintainVariable('DeviceWOL', $this->Translate('Wake On Lan'), 1, 'DM.WOL', 0, $this->ReadPropertyBoolean('WakeOnLan') == true);
+        if ($this->ReadPropertyBoolean('WakeOnLan')) {
+            $this->SetValue('DeviceWOL', 1);
+            $this->EnableAction('DeviceWOL');
+        }
         $this->SetTimerInterval('DM_UpdateTimer', $this->ReadPropertyInteger('Interval') * 1000);
     }
 
     public function UpdateStatus()
     {
-        if ((($this->ReadPropertyString('IPAddress') != '') and $this->ReadPropertyInteger('PingTimeout') != '')) {
+        if ((($this->ReadPropertyString('IPAddress') != '') && $this->ReadPropertyInteger('PingTimeout') != '')) {
             if (@Sys_Ping($this->ReadPropertyString('IPAddress'), $this->ReadPropertyInteger('PingTimeout'))) {
-                SetValue($this->GetIDForIdent('DeviceStatus'), true);
+                $this->SetValue('DeviceStatus', true);
             } else {
-                SetValue($this->GetIDForIdent('DeviceStatus'), false);
+                $this->SetValue('DeviceStatus', false);
             }
-        }
-    }
-
-    private function RegisterVariablenProfiles()
-    {
-        //Profile for Online / Offline Status
-        if (!IPS_VariableProfileExists('DM.Status')) {
-            $this->RegisterProfileBooleanEx('DM.Status', 'Network', '', '', array(
-                array(false, 'Offline',  '', 0xFF0000),
-                array(true, 'Online',  '', 0x00FF00),
-            ));
-        }
-
-        //Profile for WOL
-        if (!IPS_VariableProfileExists('DM.WOL')) {
-            $Associations = array();
-            $Associations[] = array(1, 'Start', '', -1);
-            $this->RegisterProfileIntegerEx('DM.WOL', 'Network', '', '', $Associations);
         }
     }
 
@@ -80,6 +66,24 @@ class IPS_DeviceMonitor extends IPSModule
             default:
                 $this->SendDebug(__FUNCTION__, 'Undefined Ident', 0);
                 break;
+        }
+    }
+
+    private function RegisterVariablenProfiles()
+    {
+        //Profile for Online / Offline Status
+        if (!IPS_VariableProfileExists('DM.Status')) {
+            $this->RegisterProfileBooleanEx('DM.Status', 'Network', '', '', [
+                [false, 'Offline',  '', 0xFF0000],
+                [true, 'Online',  '', 0x00FF00],
+            ]);
+        }
+
+        //Profile for WOL
+        if (!IPS_VariableProfileExists('DM.WOL')) {
+            $Associations = [];
+            $Associations[] = [1, 'Start', '', -1];
+            $this->RegisterProfileIntegerEx('DM.WOL', 'Network', '', '', $Associations);
         }
     }
 }
