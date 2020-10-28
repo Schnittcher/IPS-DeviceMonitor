@@ -3,7 +3,7 @@
 declare(strict_types=1);
 require_once __DIR__ . '/../libs/helper.php';
 
-class IPS_DeviceMonitor extends IPSModule
+class DeviceMonitor extends IPSModule
 {
     use Helper;
 
