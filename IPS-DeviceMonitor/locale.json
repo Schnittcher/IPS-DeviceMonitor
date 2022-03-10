@@ -1,15 +1,15 @@
 {
-  "translations": {
-    "de": {
-      "IP Address": "IP-Adresse",
-      "Broadcast Address": "Broadcast-Adresse",
-      "MAC Address": "MAC-Adresse",
-      "Update Interval": "Update Intervall",
-      "milliseconds": "Millisekunden",
-      "seconds": "Sekunden",
-      "Variable profile type does not match for profile": "Der Profiltyp der Variablen stimmt nicht mit dem Profil überein",
-      "Broadcast or Mac Address is missing": "Broadcast- oder Mac-Adresse fehlt",
-      "Wake on Lan": "Wake on Lan"
+    "translations": {
+        "de": {
+            "IP Address": "IP-Adresse",
+            "Broadcast Address": "Broadcast-Adresse",
+            "MAC Address": "MAC-Adresse",
+            "Update Interval": "Update Intervall",
+            "milliseconds": "Millisekunden",
+            "seconds": "Sekunden",
+            "Variable profile type does not match for profile": "Der Profiltyp der Variablen stimmt nicht mit dem Profil überein",
+            "Broadcast or Mac Address is missing": "Broadcast- oder Mac-Adresse fehlt",
+            "Wake on Lan": "Wake on Lan"
+        }
     }
-  }
 }

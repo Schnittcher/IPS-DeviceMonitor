@@ -1,28 +1,48 @@
 {
-    "elements":
-    [
-      { "type": "ValidationTextBox", "name": "IPAddress", "caption": "IP Address" },
-      { "type": "Label", "label": "Ping Timeout" },
-      { "type": "IntervalBox", "name": "PingTimeout", "caption": "milliseconds" },
-      { "type": "Label", "label": "Update Interval" },
-      { "type": "IntervalBox", "name": "Interval", "caption": "seconds" },
-      {
-        "type": "ExpansionPanel",
-        "caption": "Wake On Lan",
-        "items": [
-            { "type": "CheckBox",
-              "name": "WakeOnLan",
-              "caption": "Wake On Lan"
-            },
-            { "type": "ValidationTextBox",
-              "name": "BroadcastAddress",
-              "caption": "Broadcast Address"
-            },
-            { "type": "ValidationTextBox",
-              "name": "MACAddress",
-              "caption": "MAC Address"
-            }
-        ]
-    }
+    "elements": [
+        {
+            "type": "ValidationTextBox",
+            "name": "IPAddress",
+            "caption": "IP Address"
+        },
+        {
+            "type": "Label",
+            "label": "Ping Timeout"
+        },
+        {
+            "type": "IntervalBox",
+            "name": "PingTimeout",
+            "caption": "milliseconds"
+        },
+        {
+            "type": "Label",
+            "label": "Update Interval"
+        },
+        {
+            "type": "IntervalBox",
+            "name": "Interval",
+            "caption": "seconds"
+        },
+        {
+            "type": "ExpansionPanel",
+            "caption": "Wake On Lan",
+            "items": [
+                {
+                    "type": "CheckBox",
+                    "name": "WakeOnLan",
+                    "caption": "Wake On Lan"
+                },
+                {
+                    "type": "ValidationTextBox",
+                    "name": "BroadcastAddress",
+                    "caption": "Broadcast Address"
+                },
+                {
+                    "type": "ValidationTextBox",
+                    "name": "MACAddress",
+                    "caption": "MAC Address"
+                }
+            ]
+        }
     ]
 }
