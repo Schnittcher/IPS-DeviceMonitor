@@ -7,6 +7,7 @@ require_once __DIR__ . '/../libs/vendor/SymconModulHelper/VariableProfileHelper.
 class DeviceMonitor extends IPSModule
 {
     use Helper;
+    use VariableProfileHelper;
 
     public function Create()
     {
