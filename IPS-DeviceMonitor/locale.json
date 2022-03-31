@@ -1,6 +1,9 @@
 {
     "translations": {
         "de": {
+            "Active": "Aktiv",
+            "Instance is active": "Instanz ist aktiv",
+            "Instance is inactive": "Instanz ist inaktiv",
             "IP Address": "IP-Adresse",
             "Broadcast Address": "Broadcast-Adresse",
             "MAC Address": "MAC-Adresse",

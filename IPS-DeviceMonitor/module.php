@@ -14,6 +14,7 @@ class DeviceMonitor extends IPSModule
         //Never delete this line!
         parent::Create();
 
+        $this->RegisterPropertyBoolean('Active', false);
         $this->RegisterPropertyString('IPAddress', '');
         $this->RegisterPropertyString('BroadcastAddress', '');
         $this->RegisterPropertyString('MACAddress', '');
@@ -22,6 +23,7 @@ class DeviceMonitor extends IPSModule
         $this->RegisterPropertyBoolean('WakeOnLan', false);
 
         $this->RegisterTimer('DM_UpdateTimer', 0, 'DM_UpdateStatus($_IPS[\'TARGET\']);');
+
         $this->RegisterVariablenProfiles();
         $this->RegisterVariableBoolean('DeviceStatus', 'Status', 'DM.Status');
     }
@@ -42,7 +44,13 @@ class DeviceMonitor extends IPSModule
             $this->SetValue('DeviceWOL', 1);
             $this->EnableAction('DeviceWOL');
         }
-        $this->SetTimerInterval('DM_UpdateTimer', $this->ReadPropertyInteger('Interval') * 1000);
+        if ($this->ReadPropertyBoolean('Active')) {
+            $this->SetTimerInterval('DM_UpdateTimer', $this->ReadPropertyInteger('Interval') * 1000);
+            $this->SetStatus(102);
+        } else {
+            $this->SetTimerInterval('DM_UpdateTimer', 0);
+            $this->SetStatus(104);
+        }
     }
 
     public function UpdateStatus()
