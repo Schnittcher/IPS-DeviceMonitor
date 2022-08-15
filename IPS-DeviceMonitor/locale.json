@@ -2,6 +2,8 @@
     "translations": {
         "de": {
             "Active": "Aktiv",
+            "Active failed attempts": "Fehlversuche aktiv",
+            "Tries": "Versuche",
             "Instance is active": "Instanz ist aktiv",
             "Instance is inactive": "Instanz ist inaktiv",
             "IP Address": "IP-Adresse",

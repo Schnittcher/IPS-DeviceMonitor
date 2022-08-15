@@ -29,6 +29,16 @@
             "caption": "seconds"
         },
         {
+            "type": "CheckBox",
+            "name": "ActiveTries",
+            "caption": "Active failed attempts"
+        },
+        {
+            "type": "NumberSpinner",
+            "name": "Tries",
+            "caption": "Tries"
+        },
+        {
             "type": "ExpansionPanel",
             "caption": "Wake On Lan",
             "items": [

@@ -18,6 +18,8 @@ class DeviceMonitor extends IPSModule
         $this->RegisterPropertyString('IPAddress', '');
         $this->RegisterPropertyString('BroadcastAddress', '');
         $this->RegisterPropertyString('MACAddress', '');
+        $this->RegisterPropertyBoolean('ActiveTries', false);
+        $this->RegisterPropertyInteger('Tries', 20);
         $this->RegisterPropertyInteger('PingTimeout', 1000);
         $this->RegisterPropertyInteger('Interval', 20);
         $this->RegisterPropertyBoolean('WakeOnLan', false);
@@ -57,8 +59,16 @@ class DeviceMonitor extends IPSModule
     {
         if ((($this->ReadPropertyString('IPAddress') != '') && $this->ReadPropertyInteger('PingTimeout') != '')) {
             if (@Sys_Ping($this->ReadPropertyString('IPAddress'), $this->ReadPropertyInteger('PingTimeout'))) {
+                $this->SetBuffer('Tries', '0');
                 $this->SetValue('DeviceStatus', true);
             } else {
+                if ((intval($this->GetBuffer('Tries')) < $this->ReadPropertyInteger('Tries')) && ($this->ReadPropertyBoolean('ActiveTries'))) {
+                    $tries = intval($this->GetBuffer('Tries'));
+                    $tries++;
+                    $this->SendDebug('UpdateStatus :: Tries', $tries, 0);
+                    $this->SetBuffer('Tries', strval($tries));
+                    return;
+                }
                 $this->SetValue('DeviceStatus', false);
             }
         }
