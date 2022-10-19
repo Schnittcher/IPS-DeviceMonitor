@@ -40,6 +40,8 @@ class DeviceMonitor extends IPSModule
         //Never delete this line!
         parent::ApplyChanges();
 
+        $this->RegisterMessage($this->InstanceID,IM_CHANGESTATUS);
+
         $WOL = $this->ReadPropertyBoolean('WakeOnLan');
         $this->MaintainVariable('DeviceWOL', $this->Translate('Wake On Lan'), 1, 'DM.WOL', 0, $this->ReadPropertyBoolean('WakeOnLan') == true);
         if ($this->ReadPropertyBoolean('WakeOnLan')) {
@@ -48,11 +50,28 @@ class DeviceMonitor extends IPSModule
         }
         if ($this->ReadPropertyBoolean('Active')) {
             $this->SetTimerInterval('DM_UpdateTimer', $this->ReadPropertyInteger('Interval') * 1000);
+            $this->UpdateStatus();
             $this->SetStatus(102);
         } else {
             $this->SetTimerInterval('DM_UpdateTimer', 0);
             $this->SetStatus(104);
         }
+    }
+
+    public function MessageSink($TimeStamp, $SenderID, $Message, $Data) {
+
+        //Wenn der Status sich der Instanz ändert
+        if ($Message == IM_CHANGESTATUS) {
+            switch ($Data[0]) {
+                case 104: //Inaktiv Variable auf false setzen
+                    $this->SetValue('DeviceStatus', false);
+                    break;
+                default:
+                    # code...
+                    break;
+            }
+        }
+
     }
 
     public function UpdateStatus()
