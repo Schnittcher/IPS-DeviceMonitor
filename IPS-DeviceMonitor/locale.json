@@ -2,7 +2,10 @@
     "translations": {
         "de": {
             "Active": "Aktiv",
+            "List of Hosts": "Liste von Geräten",
             "Active failed attempts": "Fehlversuche aktiv",
+            "State": "Status",
+            "Last seen": "Zuletzt online",
             "Tries": "Versuche",
             "Instance is active": "Instanz ist aktiv",
             "Instance is inactive": "Instanz ist inaktiv",

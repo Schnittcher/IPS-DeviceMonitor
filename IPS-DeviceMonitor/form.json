@@ -6,9 +6,51 @@
             "caption": "Active"
         },
         {
+            "type": "CheckBox",
+            "name": "ListOfHosts",
+            "caption": "List of Hosts",
+            "onChange": "DM_listOfHostsVisible($id, $ListOfHosts);"
+        },
+        {
             "type": "ValidationTextBox",
             "name": "IPAddress",
-            "caption": "IP Address"
+            "caption": "IP Address",
+            "visible": true
+        },
+        {
+            "type": "List",
+            "name": "HostsList",
+            "caption": "Hosts",
+            "visible": false,
+            "rowCount": 5,
+            "add": true,
+            "delete": true,
+            "sort": {
+                "column": "Name",
+                "direction": "ascending"
+            },
+            "columns": [
+                {
+                    "caption": "Name",
+                    "name": "Name",
+                    "width": "150px",
+                    "add": "",
+                    "edit": {
+                        "type": "ValidationTextBox"
+                    }
+
+                },
+                {
+                    "caption": "IP Address",
+                    "name": "IPAddress",
+                    "width": "auto",
+                    "add": "",
+                    "edit": {
+                        "type": "ValidationTextBox"
+                    }
+                }
+            ],
+            "values": []
         },
         {
             "type": "Label",
