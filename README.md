@@ -29,18 +29,24 @@ https://github.com/Schnittcher/IPS-DeviceMonitor.git
 
 Feld | Beschreibung
 ------------ | -------------
+Aktiv| Schaltet die Instanz Aktiv bzw. Inaktiv
+Liste von Geräten | Hier kann die Option ausgewählt werden, ob eine Liste von Geräten geprüft werden soll, oder nur ein einzelnes Gerät.
 IP-Adresse  | IP-Adresse des Gerätes, welches überwacht werden soll
+Host | Diese Liste wird nur angezeigt, wenn die Option Liste von Geräten aktiv ist.
 Ping Timeout | Wartezeit in Millisekunden
-Updeate Intervall |Zeit in Sekunden, wie oft das Gerät überprüft werden soll
+Update Intervall |Zeit in Sekunden, wie oft das Gerät überprüft werden soll
+Fehlversuche aktiv | Hier kann hinterlegt werden, wie oft ein Gerät geprüft werden soll
+Versuche |  Hier kann hinterlegt werden, wie oft es versucht werden soll
+WOL | Hier können Einstellung für Wake on Lan gesetzt werden, bei einer Liste von Geräten ist WOL nicht möglich und wird ausgeblendet.
 
 ## 4. Benutzung
 Geräte können über die Variable Wake On Lan oder über die Funktion DM_WakeOnLan($InstanceID) geweckt werden.
 
 ## 5. Spenden
 
-Dieses Modul ist für die nicht kommzerielle Nutzung kostenlos, Schenkungen als Unterstützung für den Autor werden hier akzeptiert:    
+Dieses Modul ist für die nicht kommerzielle Nutzung kostenlos, Schenkungen als Unterstützung für den Autor werden hier akzeptiert:    
 
-<a href="https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=EK4JRP87XLSHW" target="_blank"><img src="https://www.paypalobjects.com/de_DE/DE/i/btn/btn_donate_LG.gif" border="0" /></a>
+<a href="https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=EK4JRP87XLSHW" target="_blank"><img src="https://www.paypalobjects.com/de_DE/DE/i/btn/btn_donate_LG.gif" border="0" /></a> <a href="https://www.amazon.de/hz/wishlist/ls/3JVWED9SZMDPK?ref_=wl_share" target="_blank">Amazon Wunschzettel</a>
 
 ## 6. Lizenz
 
