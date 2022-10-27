@@ -9,7 +9,7 @@
             "type": "CheckBox",
             "name": "ListOfHosts",
             "caption": "List of Hosts",
-            "onChange": "DM_listOfHostsVisible($id, $ListOfHosts);"
+            "onChange": "DM_listOfHostsActive($id, $ListOfHosts);"
         },
         {
             "type": "ValidationTextBox",
@@ -26,13 +26,13 @@
             "add": true,
             "delete": true,
             "sort": {
-                "column": "Name",
+                "column": "name",
                 "direction": "ascending"
             },
             "columns": [
                 {
                     "caption": "Name",
-                    "name": "Name",
+                    "name": "name",
                     "width": "150px",
                     "add": "",
                     "edit": {
@@ -83,6 +83,7 @@
         {
             "type": "ExpansionPanel",
             "caption": "Wake On Lan",
+            "name": "WOL",
             "items": [
                 {
                     "type": "CheckBox",

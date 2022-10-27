@@ -29,8 +29,8 @@ class DeviceMonitor extends IPSModule
         $this->RegisterTimer('DM_UpdateTimer', 0, 'DM_UpdateStatus($_IPS[\'TARGET\']);');
 
         $this->RegisterVariablenProfiles();
-        $this->RegisterVariableBoolean('DeviceStatus', $this->Translate('State'), 'DM.Status');
-        $this->RegisterVariableInteger('LastSeen', $this->Translate('Last seen'), '~UnixTimestamp');
+        $this->RegisterVariableBoolean('DeviceStatus', $this->Translate('State'), 'DM.Status', 0);
+        $this->RegisterVariableInteger('LastSeen', $this->Translate('Last seen'), '~UnixTimestamp', 1);
     }
 
     public function Destroy()
@@ -45,12 +45,39 @@ class DeviceMonitor extends IPSModule
 
         $this->RegisterMessage($this->InstanceID, IM_CHANGESTATUS);
 
+        $hostsList = json_decode($this->ReadPropertyString('HostsList'), true);
+        $ListOfHosts = $this->ReadPropertyBoolean('ListOfHosts');
+        $childrenIDs = IPS_GetChildrenIDs($this->InstanceID);
+        foreach ($childrenIDs as $key => $childID) {
+            $childObject = IPS_GetObject($childID);
+            if ($childObject['ObjectType'] == 2) { //Wenn Objekt eine Variable ist
+                $varibaleIdent = explode('_', $childObject['ObjectIdent']);
+                if ($varibaleIdent[0] == 'lst') { //Wenn Ident aus der Liste der Variablen stammt
+                    if (!array_search($childObject['ObjectIdent'], array_column($hostsList, 'IPAddress'))) {
+                        IPS_LogMessage('ObjectIdent', $childObject['ObjectIdent']);
+                        $this->UnregisterVariable($childObject['ObjectIdent']);
+                    }
+                }
+            }
+        }
+
+        $variablePosition = 2;
+        foreach ($hostsList as $key => $host) {
+            $IdentState = 'lst_' . str_replace('.', '_', $host['name']);
+            $IdentLastSeen = 'lst_' . str_replace('.', '_', $host['name']) . '_LastSeen';
+            $variablePosition++;
+            $this->MaintainVariable($IdentState, $this->Translate('State') . ' ' . $host['name'], 0, 'DM.Status', $variablePosition, $ListOfHosts);
+            $variablePosition++;
+            $this->MaintainVariable($IdentLastSeen, $this->Translate('Last seen') . ' ' . $host['name'], 1, 'UnixTimestamp', $variablePosition, $ListOfHosts);
+        }
+
         $WOL = $this->ReadPropertyBoolean('WakeOnLan');
-        $this->MaintainVariable('DeviceWOL', $this->Translate('Wake On Lan'), 1, 'DM.WOL', 0, $this->ReadPropertyBoolean('WakeOnLan') == true);
-        if ($this->ReadPropertyBoolean('WakeOnLan')) {
+        $this->MaintainVariable('DeviceWOL', $this->Translate('Wake On Lan'), 1, 'DM.WOL', 0, $this->ReadPropertyBoolean('WakeOnLan') == true && $this->ReadPropertyBoolean('ListOfHosts') == false);
+        if ($this->ReadPropertyBoolean('WakeOnLan') && $this->ReadPropertyBoolean('ListOfHosts') == false) {
             $this->SetValue('DeviceWOL', 1);
             $this->EnableAction('DeviceWOL');
         }
+
         if ($this->ReadPropertyBoolean('Active')) {
             $this->SetTimerInterval('DM_UpdateTimer', $this->ReadPropertyInteger('Interval') * 1000);
             $this->UpdateStatus();
@@ -65,10 +92,12 @@ class DeviceMonitor extends IPSModule
     {
         $form = json_decode(file_get_contents(__DIR__ . '/form.json'), true);
         if ($this->ReadPropertyBoolean('ListOfHosts')) {
-            //Ein Host
+            //Ein Host unsichtbar setzen, wenn die Liste aktiv ist
             $form['elements'][2]['visible'] = false;
             //Liste von Hosts
             $form['elements'][3]['visible'] = true;
+            //WOL unsichtbar setzen, wenn die Liste aktiv ist
+            $form['elements'][10]['visible'] = false;
         }
         return json_encode($form);
     }
@@ -97,22 +126,35 @@ class DeviceMonitor extends IPSModule
         //Liste der Hosts durch gehen und pingen
         if ($ListOfHosts) {
             $hostsList = json_decode($this->ReadPropertyString('HostsList'), true);
+            $totalState = true;
             foreach ($hostsList as $key => $host) {
+                $IdentState = 'lst_' . str_replace('.', '_', $host['name']);
+                $IdentLastSeen = 'lst_' . str_replace('.', '_', $host['name']) . '_LastSeen';
                 $deviceState = $this->pingHost($host['IPAddress']);
+                $this->SetValue($IdentState, $deviceState);
+                if ($deviceState) {
+                    $this->SetValue($IdentLastSeen, time());
+                }
+
+                //Wenn ein Gerät offline ist, setze die Gesamt Variable auf false
                 if (!$deviceState) {
+                    $totalState = false;
                     $this->SendDebug('Device offline' . $host['IPAddress'], $host['IPAddress'], 0);
-                    $this->SetValue('DeviceStatus', false);
-                    return;
                 }
             }
-            $this->SetValue('DeviceStatus', true);
-            $this->SetValue('LastSeen', time());
-
+            $this->SetValue('DeviceStatus', $totalState);
+            if ($totalState) {
+                $this->SetValue('LastSeen', time());
+            }
             return;
         }
+
         //Nur den einen Host pingen
-        $this->SetValue('DeviceStatus', $this->pingHost($this->ReadPropertyString('IPAddress')));
-        $this->SetValue('LastSeen', time());
+        $deviceState = $this->pingHost($this->ReadPropertyString('IPAddress'));
+        $this->SetValue('DeviceStatus', $deviceState);
+        if ($deviceState) {
+            $this->SetValue('LastSeen', time());
+        }
     }
 
     public function RequestAction($Ident, $Value)
@@ -130,14 +172,16 @@ class DeviceMonitor extends IPSModule
         }
     }
 
-    public function listOfHostsVisible($Value)
+    public function listOfHostsActive($Value)
     {
         if ($Value) {
             $this->UpdateFormField('HostsList', 'visible', true);
             $this->UpdateFormField('IPAddress', 'visible', false);
+            $this->UpdateFormField('WOL', 'visible', false);
         } else {
             $this->UpdateFormField('HostsList', 'visible', false);
             $this->UpdateFormField('IPAddress', 'visible', true);
+            $this->UpdateFormField('WOL', 'visible', true);
         }
     }
 
