@@ -46,31 +46,26 @@ class DeviceMonitor extends IPSModule
         $this->RegisterMessage($this->InstanceID, IM_CHANGESTATUS);
 
         $hostsList = json_decode($this->ReadPropertyString('HostsList'), true);
-        IPS_LogMessage('hostsList', print_r($hostsList, true));
         $ListOfHosts = $this->ReadPropertyBoolean('ListOfHosts');
         $childrenIDs = IPS_GetChildrenIDs($this->InstanceID);
         foreach ($childrenIDs as $key => $childID) {
-            if (IPS_ObjectExists($childID)) {
-                $childObject = IPS_GetObject($childID);
-                if ($childObject['ObjectType'] == 2) { //Wenn Objekt eine Variable ist
-                if (strpos($childObject['ObjectIdent'], 'lst_') !== false) { //Wenn Ident aus der Liste der Variablen stammt
-                    if (strpos($childObject['ObjectIdent'], '_LastSeen') == false) { //Wenn es nicht die LastSeen Variable ist
-                    $varibaleIdent = explode('lst_', $childObject['ObjectIdent']);
-                        $IPAddress = str_replace('_', '.', $varibaleIdent[1]);
-                        if (array_search($IPAddress, array_column($hostsList, 'IPAddress')) === false) {
-                            $this->UnregisterVariable($childObject['ObjectIdent']);
-                            $this->UnregisterVariable($childObject['ObjectIdent'] . '_LastSeen');
-                        }
+            $childObject = IPS_GetObject($childID);
+            if ($childObject['ObjectType'] == 2) { //Wenn Objekt eine Variable ist
+                $varibaleIdent = explode('_', $childObject['ObjectIdent']);
+                if ($varibaleIdent[0] == 'lst') { //Wenn Ident aus der Liste der Variablen stammt
+                    if (!array_search($childObject['ObjectIdent'], array_column($hostsList, 'IPAddress'))) {
+                        $this->UnregisterVariable($childObject['ObjectIdent']);
                     }
-                }
                 }
             }
         }
 
         $variablePosition = 2;
         foreach ($hostsList as $key => $host) {
-            $IdentState = 'lst_' . str_replace('.', '_', $host['IPAddress']);
-            $IdentLastSeen = 'lst_' . str_replace('.', '_', $host['IPAddress']) . '_LastSeen';
+            $IdentState = 'lst_' . str_replace('.', '_', $host['name']);
+            $IdentState = 'lst_' . str_replace('-', '_', $IdentState);
+            $IdentLastSeen = 'lst_' . str_replace('.', '_', $host['name']) . '_LastSeen';
+            $IdentLastSeen = 'lst_' . str_replace('_', '_', $IdentLastSeen);
 
             $variablePosition++;
             $this->MaintainVariable($IdentState, $this->Translate('State') . ' ' . $host['name'], 0, 'DM.Status', $variablePosition, $ListOfHosts);
@@ -135,8 +130,10 @@ class DeviceMonitor extends IPSModule
             $hostsList = json_decode($this->ReadPropertyString('HostsList'), true);
             $totalState = true;
             foreach ($hostsList as $key => $host) {
-                $IdentState = 'lst_' . str_replace('.', '_', $host['IPAddress']);
-                $IdentLastSeen = 'lst_' . str_replace('.', '_', $host['IPAddress']) . '_LastSeen';
+                $IdentState = 'lst_' . str_replace('.', '_', $host['name']);
+                $IdentState = 'lst_' . str_replace('-', '_', $IdentState);
+                $IdentLastSeen = 'lst_' . str_replace('.', '_', $host['name']) . '_LastSeen';
+                $IdentLastSeen = 'lst_' . str_replace('_', '_', $IdentLastSeen);
 
                 $deviceState = $this->pingHost($host['IPAddress']);
                 $this->SetValue($IdentState, $deviceState);
