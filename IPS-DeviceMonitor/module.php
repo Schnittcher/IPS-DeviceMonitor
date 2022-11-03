@@ -64,7 +64,10 @@ class DeviceMonitor extends IPSModule
         $variablePosition = 2;
         foreach ($hostsList as $key => $host) {
             $IdentState = 'lst_' . str_replace('.', '_', $host['name']);
+            $IdentState = 'lst_' . str_replace('-', '_', $IdentState);
             $IdentLastSeen = 'lst_' . str_replace('.', '_', $host['name']) . '_LastSeen';
+            $IdentLastSeen = 'lst_' . str_replace('_', '_', $IdentLastSeen);
+
             $variablePosition++;
             $this->MaintainVariable($IdentState, $this->Translate('State') . ' ' . $host['name'], 0, 'DM.Status', $variablePosition, $ListOfHosts);
             $variablePosition++;
