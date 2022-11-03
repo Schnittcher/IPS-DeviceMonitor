@@ -54,7 +54,6 @@ class DeviceMonitor extends IPSModule
                 $varibaleIdent = explode('_', $childObject['ObjectIdent']);
                 if ($varibaleIdent[0] == 'lst') { //Wenn Ident aus der Liste der Variablen stammt
                     if (!array_search($childObject['ObjectIdent'], array_column($hostsList, 'IPAddress'))) {
-                        IPS_LogMessage('ObjectIdent', $childObject['ObjectIdent']);
                         $this->UnregisterVariable($childObject['ObjectIdent']);
                     }
                 }
@@ -132,7 +131,10 @@ class DeviceMonitor extends IPSModule
             $totalState = true;
             foreach ($hostsList as $key => $host) {
                 $IdentState = 'lst_' . str_replace('.', '_', $host['name']);
+                $IdentState = 'lst_' . str_replace('-', '_', $IdentState);
                 $IdentLastSeen = 'lst_' . str_replace('.', '_', $host['name']) . '_LastSeen';
+                $IdentLastSeen = 'lst_' . str_replace('_', '_', $IdentLastSeen);
+
                 $deviceState = $this->pingHost($host['IPAddress']);
                 $this->SetValue($IdentState, $deviceState);
                 if ($deviceState) {
