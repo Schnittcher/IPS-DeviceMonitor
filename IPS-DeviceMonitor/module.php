@@ -206,7 +206,6 @@ class DeviceMonitor extends IPSModule
                     $this->SendDebug('UpdateStatus :: Tries for IP-Address', $IPAddress, 0);
                     $this->SendDebug('UpdateStatus :: Tries', $tries, 0);
                     $this->SetBuffer('Tries', strval($tries));
-                    return;
                 }
                 return false;
             }
