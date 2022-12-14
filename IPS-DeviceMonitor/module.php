@@ -208,8 +208,8 @@ class DeviceMonitor extends IPSModule
                     $this->SetBuffer('Tries', strval($tries));
                 }
                 if (intval($this->GetBuffer('Tries')) >= $this->ReadPropertyInteger('Tries')) {
-                    return false;
                     $this->SetBuffer('Tries', '0');
+                    return false;
                 } else {
                     return true;
                 }
