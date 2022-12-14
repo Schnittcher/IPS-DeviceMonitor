@@ -207,7 +207,11 @@ class DeviceMonitor extends IPSModule
                     $this->SendDebug('UpdateStatus :: Tries', $tries, 0);
                     $this->SetBuffer('Tries', strval($tries));
                 }
-                return false;
+                if (intval($this->GetBuffer('Tries')) >= $this->ReadPropertyInteger('Tries')) {
+                    return false;
+                } else {
+                    return true;
+                }
             }
         }
     }
