@@ -6,12 +6,16 @@
 # IPS-DeviceMonitor
    Mit diesem Modul ist es möglich den Online / Offline Status von Geräten im LAN zu überwachen.
  
-   ## Inhaltverzeichnis
-   1. [Voraussetzungen](#1-voraussetzungen)
-   2. [Installation](#2installation)
-   3. [Konfiguration in IP-Symcon](#3-konfiguration-in-ip-symcon)
-   4. [Spenden](#4-spenden)
-   5. [Lizenz](#5-lizenz)
+## Inhaltverzeichnis
+- [IPS-DeviceMonitor](#ips-devicemonitor)
+  - [Inhaltverzeichnis](#inhaltverzeichnis)
+  - [1. Voraussetzungen](#1-voraussetzungen)
+  - [2. Installation](#2-installation)
+  - [3. Konfiguration in IP-Symcon](#3-konfiguration-in-ip-symcon)
+    - [IPS-DeviceMonitor](#ips-devicemonitor-1)
+  - [4. Benutzung](#4-benutzung)
+  - [5. Spenden](#5-spenden)
+  - [6. Lizenz](#6-lizenz)
    
 ## 1. Voraussetzungen
 
@@ -35,8 +39,8 @@ IP-Adresse  | IP-Adresse des Gerätes, welches überwacht werden soll
 Host | Diese Liste wird nur angezeigt, wenn die Option Liste von Geräten aktiv ist.
 Ping Timeout | Wartezeit in Millisekunden
 Update Intervall |Zeit in Sekunden, wie oft das Gerät überprüft werden soll
-Fehlversuche aktiv | Hier kann hinterlegt werden, wie oft ein Gerät geprüft werden soll
-Versuche |  Hier kann hinterlegt werden, wie oft es versucht werden soll
+Fehlversuche aktiv | Hier kann hinterlegt werden, ob das Gerät mit Fehlerversuchen geprüft werden soll.
+Versuche |  Hier kann hinterlegt werden, wie oft es versucht werden soll, bis die Variable auf "offline" gesetzt wird.
 WOL | Hier können Einstellung für Wake on Lan gesetzt werden, bei einer Liste von Geräten ist WOL nicht möglich und wird ausgeblendet.
 
 ## 4. Benutzung
