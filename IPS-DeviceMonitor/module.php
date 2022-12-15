@@ -209,14 +209,14 @@ class DeviceMonitor extends IPSModule
             if (@Sys_Ping($IPAddress, $this->ReadPropertyInteger('PingTimeout'))) {
                 $this->SetBuffer('Tries' . $Ident, '0');
                 $this->SetBuffer('Tries', '0');
-                //$this->SetBuffer($Ident, 'true');
+                $this->SetBuffer($Ident, 'true');
                 return true;
             } else {
-                if ((intval($this->GetBuffer('Tries')) < $this->ReadPropertyInteger('Tries')) && ($this->ReadPropertyBoolean('ActiveTries'))) {
+                if ((intval($this->GetBuffer('Tries' . $Ident)) < $this->ReadPropertyInteger('Tries')) && ($this->ReadPropertyBoolean('ActiveTries'))) {
                     $tries = intval($this->GetBuffer('Tries' . $Ident));
                     $tries++;
                     $this->SendDebug('UpdateStatus :: Tries for IP-Address', $IPAddress, 0);
-                    $this->SendDebug('UpdateStatus :: Tries', $tries, 0);
+                    $this->SendDebug('UpdateStatus :: Tries' . $Ident, $tries, 0);
                     $this->SetBuffer('Tries' . $Ident, strval($tries));
                 }
                 if (intval($this->GetBuffer('Tries' . $Ident)) >= $this->ReadPropertyInteger('Tries')) {
