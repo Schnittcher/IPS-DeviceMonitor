@@ -43,6 +43,11 @@ class DeviceMonitor extends IPSModule
         //Never delete this line!
         parent::ApplyChanges();
 
+        $this->SetValue('DeviceStatus', false);
+        //Buffer resetten, damit die Zählung neu beginnen kann.
+        $this->SetBuffer('DeviceStatus', 'false');
+        $this->SetBuffer('TriesDeviceStatus', '0');
+
         $this->RegisterMessage($this->InstanceID, IM_CHANGESTATUS);
 
         $hostsList = json_decode($this->ReadPropertyString('HostsList'), true);
@@ -74,6 +79,11 @@ class DeviceMonitor extends IPSModule
 
             $variablePosition++;
             $this->MaintainVariable($IdentState, $this->Translate('State') . ' ' . $host['name'], 0, 'DM.Status', $variablePosition, $ListOfHosts);
+            if ($ListOfHosts) {
+                //Buffer resetten, damit die Zählung neu beginnen kann.
+                $this->SetBuffer($IdentState, '');
+                $this->SetBuffer('Tries' . $Ident, 0);
+            }
             $variablePosition++;
             $this->MaintainVariable($IdentLastSeen, $this->Translate('Last seen') . ' ' . $host['name'], 1, 'UnixTimestamp', $variablePosition, $ListOfHosts);
         }
@@ -138,7 +148,7 @@ class DeviceMonitor extends IPSModule
                 $IdentState = 'lst_' . str_replace('.', '_', $host['IPAddress']);
                 $IdentLastSeen = 'lst_' . str_replace('.', '_', $host['IPAddress']) . '_LastSeen';
 
-                $deviceState = $this->pingHost($host['IPAddress']);
+                $deviceState = $this->pingHost($host['IPAddress'], $IdentState);
                 $this->SetValue($IdentState, $deviceState);
                 if ($deviceState) {
                     $this->SetValue($IdentLastSeen, time());
@@ -147,7 +157,7 @@ class DeviceMonitor extends IPSModule
                 //Wenn ein Gerät offline ist, setze die Gesamt Variable auf false
                 if (!$deviceState) {
                     $totalState = false;
-                    $this->SendDebug('Device offline' . $host['IPAddress'], $host['IPAddress'], 0);
+                    $this->SendDebug('Device offline', $host['IPAddress'], 0);
                 }
             }
             $this->SetValue('DeviceStatus', $totalState);
@@ -158,7 +168,7 @@ class DeviceMonitor extends IPSModule
         }
 
         //Nur den einen Host pingen
-        $deviceState = $this->pingHost($this->ReadPropertyString('IPAddress'));
+        $deviceState = $this->pingHost($this->ReadPropertyString('IPAddress'), 'DeviceStatus');
         $this->SetValue('DeviceStatus', $deviceState);
         if ($deviceState) {
             $this->SetValue('LastSeen', time());
@@ -193,25 +203,32 @@ class DeviceMonitor extends IPSModule
         }
     }
 
-    private function pingHost($IPAddress)
+    private function pingHost($IPAddress, $Ident)
     {
         if ((($IPAddress != '') && $this->ReadPropertyInteger('PingTimeout') != '')) {
             if (@Sys_Ping($IPAddress, $this->ReadPropertyInteger('PingTimeout'))) {
+                $this->SetBuffer('Tries' . $Ident, '0');
                 $this->SetBuffer('Tries', '0');
+                //$this->SetBuffer($Ident, 'true');
                 return true;
             } else {
                 if ((intval($this->GetBuffer('Tries')) < $this->ReadPropertyInteger('Tries')) && ($this->ReadPropertyBoolean('ActiveTries'))) {
-                    $tries = intval($this->GetBuffer('Tries'));
+                    $tries = intval($this->GetBuffer('Tries' . $Ident));
                     $tries++;
                     $this->SendDebug('UpdateStatus :: Tries for IP-Address', $IPAddress, 0);
                     $this->SendDebug('UpdateStatus :: Tries', $tries, 0);
-                    $this->SetBuffer('Tries', strval($tries));
+                    $this->SetBuffer('Tries' . $Ident, strval($tries));
                 }
-                if (intval($this->GetBuffer('Tries')) >= $this->ReadPropertyInteger('Tries')) {
-                    $this->SetBuffer('Tries', '0');
+                if (intval($this->GetBuffer('Tries' . $Ident)) >= $this->ReadPropertyInteger('Tries')) {
+                    $this->SetBuffer('Tries' . $Ident, '0');
+                    $this->SetBuffer($Ident, 'false');
                     return false;
                 } else {
-                    return true;
+                    if ($this->GetBuffer($Ident) == 'true') {
+                        return true;
+                    } else {
+                        return false;
+                    }
                 }
             }
         }
