@@ -224,7 +224,7 @@ class DeviceMonitor extends IPSModule
                     $this->SetBuffer($Ident, 'false');
                     return false;
                 } else {
-                    if ($this->GetBuffer($Ident) == 'true') {
+                    if (($this->GetBuffer($Ident) == 'true') && ($this->ReadPropertyBoolean('ActiveTries'))) {
                         return true;
                     } else {
                         return false;
