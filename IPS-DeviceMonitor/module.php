@@ -82,7 +82,7 @@ class DeviceMonitor extends IPSModule
             if ($ListOfHosts) {
                 //Buffer resetten, damit die Zählung neu beginnen kann.
                 $this->SetBuffer($IdentState, '');
-                $this->SetBuffer('Tries' . $Ident, 0);
+                $this->SetBuffer('Tries' . $IdentState, 0);
             }
             $variablePosition++;
             $this->MaintainVariable($IdentLastSeen, $this->Translate('Last seen') . ' ' . $host['name'], 1, 'UnixTimestamp', $variablePosition, $ListOfHosts);
