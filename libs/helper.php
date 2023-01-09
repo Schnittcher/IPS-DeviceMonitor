@@ -23,7 +23,13 @@ trait helper
                 $this->SendDebug('Error creating socket!', 'Error code is ' . socket_last_error($s) . ' - ' . socket_strerror(socket_last_error($s)), 0);
             } else {
                 // setting a broadcast option to socket:
-                $opt_ret = socket_set_option($s, 1, 6, true);
+
+                $opt_ret = socket_set_option($s, SOL_SOCKET, SO_BROADCAST, 1);
+                if ($opt_ret < 0) {
+                    $this->SendDebug('setsockopt() failed, error:', strerror($opt_ret), 0);
+                }
+                $opt_ret = socket_set_option($s, SOL_SOCKET, SO_REUSEADDR, 1);
+                //$opt_ret = socket_set_option($s, 1, 6, true);
                 if ($opt_ret < 0) {
                     $this->SendDebug('setsockopt() failed, error:', strerror($opt_ret), 0);
                 }
