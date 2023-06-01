@@ -51,7 +51,6 @@ class DeviceMonitor extends IPSModule
         $this->RegisterMessage($this->InstanceID, IM_CHANGESTATUS);
 
         $hostsList = json_decode($this->ReadPropertyString('HostsList'), true);
-        IPS_LogMessage('hostsList', print_r($hostsList, true));
         $ListOfHosts = $this->ReadPropertyBoolean('ListOfHosts');
         $childrenIDs = IPS_GetChildrenIDs($this->InstanceID);
         foreach ($childrenIDs as $key => $childID) {
