@@ -6,6 +6,7 @@
             "Active failed attempts": "Fehlversuche aktiv",
             "State": "Status",
             "Last seen": "Zuletzt online",
+            "Last offline": "Zuletzt offline",
             "Tries": "Versuche",
             "Instance is active": "Instanz ist aktiv",
             "Instance is inactive": "Instanz ist inaktiv",

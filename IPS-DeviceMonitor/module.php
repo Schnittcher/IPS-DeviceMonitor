@@ -31,6 +31,8 @@ class DeviceMonitor extends IPSModule
         $this->RegisterVariablenProfiles();
         $this->RegisterVariableBoolean('DeviceStatus', $this->Translate('State'), 'DM.Status', 0);
         $this->RegisterVariableInteger('LastSeen', $this->Translate('Last seen'), '~UnixTimestamp', 1);
+        $this->RegisterVariableInteger('LastOffline', $this->Translate('Last offline'), '~UnixTimestamp', 1);
+
     }
 
     public function Destroy()
@@ -58,12 +60,13 @@ class DeviceMonitor extends IPSModule
                 $childObject = IPS_GetObject($childID);
                 if ($childObject['ObjectType'] == 2) { //Wenn Objekt eine Variable ist
                 if (strpos($childObject['ObjectIdent'], 'lst_') !== false) { //Wenn Ident aus der Liste der Variablen stammt
-                    if (strpos($childObject['ObjectIdent'], '_LastSeen') == false) { //Wenn es nicht die LastSeen Variable ist
-                    $varibaleIdent = explode('lst_', $childObject['ObjectIdent']);
+                    if ((strpos($childObject['ObjectIdent'], '_LastSeen') == false) OR (strpos($childObject['ObjectIdent'], '_LastOffline') == false))  { //Wenn es nicht die LastSeen Variable ist
+                        $varibaleIdent = explode('lst_', $childObject['ObjectIdent']);
                         $IPAddress = str_replace('_', '.', $varibaleIdent[1]);
                         if (array_search($IPAddress, array_column($hostsList, 'IPAddress')) === false) {
                             $this->UnregisterVariable($childObject['ObjectIdent']);
                             $this->UnregisterVariable($childObject['ObjectIdent'] . '_LastSeen');
+                            $this->UnregisterVariable($childObject['ObjectIdent'] . '_LastOffline');
                         }
                     }
                 }
@@ -75,6 +78,7 @@ class DeviceMonitor extends IPSModule
         foreach ($hostsList as $key => $host) {
             $IdentState = 'lst_' . str_replace('.', '_', $host['IPAddress']);
             $IdentLastSeen = 'lst_' . str_replace('.', '_', $host['IPAddress']) . '_LastSeen';
+            $IdentLastOffline = 'lst_' . str_replace('.', '_', $host['IPAddress']) . '_LastOffline';
 
             $variablePosition++;
             $this->MaintainVariable($IdentState, $this->Translate('State') . ' ' . $host['name'], 0, 'DM.Status', $variablePosition, $ListOfHosts);
@@ -85,6 +89,8 @@ class DeviceMonitor extends IPSModule
             }
             $variablePosition++;
             $this->MaintainVariable($IdentLastSeen, $this->Translate('Last seen') . ' ' . $host['name'], 1, 'UnixTimestamp', $variablePosition, $ListOfHosts);
+            $variablePosition++;
+            $this->MaintainVariable($IdentLastOffline, $this->Translate('Last offline') . ' ' . $host['name'], 1, 'UnixTimestamp', $variablePosition, $ListOfHosts);
         }
 
         $WOL = $this->ReadPropertyBoolean('WakeOnLan');
@@ -146,6 +152,8 @@ class DeviceMonitor extends IPSModule
             foreach ($hostsList as $key => $host) {
                 $IdentState = 'lst_' . str_replace('.', '_', $host['IPAddress']);
                 $IdentLastSeen = 'lst_' . str_replace('.', '_', $host['IPAddress']) . '_LastSeen';
+                $IdentLastOffline = 'lst_' . str_replace('.', '_', $host['IPAddress']) . '_LastOffline';
+
 
                 $deviceState = $this->pingHost($host['IPAddress'], $IdentState);
                 $this->SetValue($IdentState, $deviceState);
@@ -156,6 +164,8 @@ class DeviceMonitor extends IPSModule
                 //Wenn ein Gerät offline ist, setze die Gesamt Variable auf false
                 if (!$deviceState) {
                     $totalState = false;
+                    $this->SetValue($IdentState, $deviceState);
+                    $this->SetValue($IdentLastOffline, time());
                     $this->SendDebug('Device offline', $host['IPAddress'], 0);
                 }
             }
@@ -171,6 +181,8 @@ class DeviceMonitor extends IPSModule
         $this->SetValue('DeviceStatus', $deviceState);
         if ($deviceState) {
             $this->SetValue('LastSeen', time());
+        } else {
+            $this->SetValue('LastOffline', time());
         }
     }
 
